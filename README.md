@@ -33,12 +33,12 @@ The first thing we need to do is tokenize our text data. After tokenization, we 
 ![Text_prepocessing](https://user-images.githubusercontent.com/90323558/150655111-58f50d97-de78-49a2-8f9a-63703d0738ea.jpg)
 
 #### 2.2.1	Word Tokenization
-Tokenization is splitting text content into parts, words, and sentences (https://bit.ly/3FRyDjM) .  The most common way is by words.  Converting text into a set of tokens makes it easy to clean the text data further.  We used the NLTK word tokenize method to convert the text data into token lists. 
+Tokenization is splitting text content into parts, words, and sentences (https://bit.ly/3FRyDjM).  The most common way is by words. Converting text into a set of tokens makes it easy to clean the text data further.  We used the NLTK word tokenize method to convert the text data into token lists. 
 
 ![token](https://user-images.githubusercontent.com/90323558/150655317-13866b66-d0d1-459d-ad24-00895c438429.jpg)
 
 #### 2.2.2	Stop-words Removal 
-Stop-words are words that do not carry any insights.  For example, words like in, and the, and which are abundant in text data.  They are not required for analyzing data; however, they need resources for storage and processing.  So, eliminating most of them is important for efficiency. We ran the previously created token list through a filter function that checks if the token is in the stop-words list. If so, the stop-word is not returned. We finally had the remaining tokens.
+Stop-words are words that do not carry any insights. For example, words like in, and the, and which are abundant in text data. They are not required for analyzing data; however, they need resources for storage and processing.  So, eliminating most of them is important for efficiency. We ran the previously created token list through a filter function that checks if the token is in the stop-words list. If so, the stop-word is not returned. We finally had the remaining tokens.
  
 ![stop](https://user-images.githubusercontent.com/90323558/150655329-fd0a3734-ce65-4e92-9b1e-79fb232c7dcf.jpg)
 
