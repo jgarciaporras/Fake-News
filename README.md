@@ -73,7 +73,60 @@ The results are shown in the picture below.
 After we cleaned our data, now we trained our model with different Classifier models (e.g., Random Forest Classifier, Multinomial Naive Bayes, Support Vector Machine, Logistic Regression, Decision Trees. 
 In order to find the best model for our project with the best parameters we decided to use Random Search because it would take less time and less computer resources.  For this project we didn’t use Grid Search because could be thought of as an exhaustive search for selecting a model. In Grid Search, the data scientist sets up a grid of hyperparameter values and for each combination, trains a model and scores on the testing data. In this approach, every combination of hyperparameter values is tried which can be very inefficient.(https://bit.ly/3KvCoip)
 In addition, we decided to use Count Vectorizer and TF-IDF as a feature extractor.  The difference between those techniques is that TF-IDF not only gives us the frequency of the words but also the importance.
-After we trained our model with 2 different techniques of feature extractor. In the next Table # below, we will see which model was the best. 
+After we trained our model with 2 different techniques of feature extractor. In the next Table , we will see which model was the best. 
 
+|  Model |  Feature_Extractor |  Best_Hyperparameters | AUC Score  |
+|---|---|---|---|
+| RandomForest |  Tf-IDF |  'model__criterion': ['gini', 'entropy'] 'model__max_depth': [5, 10, 20, 50, 100] 'model__min_samples_leaf': [1, 2, 4]'model__min_samples_split': [2, 5, 10] 'model__n_estimators': [200, 400, 1000]'tfidf__norm': ('l1', 'l2')'tfidf__use_idf': (True, False)| 0.540567809 | 
+
+
+### 2.4 Simple Neural Network:
+#### 2.4.1	Architecture
+For our neural network, we used a relatively shallow network of just 2 hidden layers as shown in table below. 
+
+|  Layer|  Neurons|  Activation|
+|---|---|---|
+| Input|  300 |-|
+| Hiden 1| 64|ReLU|
+| Hiden 2|128|ReLU|
+| Output| 6|Sigmoid|
+
+The input layer took in as input 300 dimensional vectors of embedded values, each representing a single word. The 1st and 2nd Hidden layers have 64 and 128 neurons respectively and along with this they also have the same activation function. The output layer has 6 neurons representing each of our 6 classes and Sigmoid as its activation function. I experimented with Softmax too as the activation for the final layer. However, upon testing I achieved better results through Sigmoid. Furthermore, the network had 2,847,650 parameters in total out of which just 42, 950 were trainable.
+
+#### 2.4.2 GloVe Embeddings
+
+As we have seen above, CountVectorizer and Tf-IDF encodes the words using a single numeric value. However, there is a much more powerful way called GloVe embeddings (https://stanford.io/3FXx7wd) which embeds each word in a 300-dimensional vector.  GloVe has been pretrained on 6 billion words. These vectors when plotted on a multidimensional plane plots closely related words in close proximity to each other.
+
+#### 2.4.3	Text preprocessing for Neural Network
+Since the input size to the neural network must be constant, we set 20 as the max length for each sentence. The end of the sentences would be padded with 0’s to match this length. Furthermore, we set a vocabulary size of 6000. Words which are out of this vocabulary range would be replaced with the “<OOV>” (Out of Vocab) token. Finally, the class labels were one-hot encoded.
+
+#### 2.4.4	Training
+ 
+For the loss function we went with binary cross entropy since we are using Sigmoid in the final layer, and we used Adam as our optimizer. The network was trained on 50 epochs with a batch size of 64. Along with this, we also employed early stopping which stops training if it does not see an improvement in the validation loss for 20 epochs.
+ 
+#### 2.4.5	Training Evaluation
+ 
+ <img width="229" alt="training_validation_loss" src="https://user-images.githubusercontent.com/90323558/150656046-9b7acb34-593a-4e01-bd79-06f829958300.png">
+
+The above loss plot denotes that the training loss is decreasing but at the same time the validation loss seems to be increasing through each epoch. One of the major reasons behind this could be attributed to the fact that network is severely overfitting on the train data. We tried to tackle this be implementing early stopping. However, a better approach would be to modify the normalization parameters such as increasing the Dropout rate.
+ 
+### 3.0	RESULTS
+ 
+|  Model|  Feature Extractor|  AUC Score|
+|---|---|---|
+| Neural Network|  Glove |0.6110|
+| Random Forest| Tf-IDF |0.5405|
+ 
+ 
+Upon evaluating on the test set, as shown in the table abovee, we can see that the simple neural network easily outperformed RandomForest which was our previous best model. We didn’t perform any hyperparameter tuning on the neural network to achieve this.
+
+To test this network further, we tested it on a real fake news headline. The network was able to predict that the given news snippet was fake as shown in the figure below.
+
+ ![detect](https://user-images.githubusercontent.com/90323558/150656202-11177c8b-5336-4b87-b6d0-d0c34b10a8e8.jpg)
+
+ 
+### 4.0	CONCLUSIONS
+To conclude, Tf-IDF performed better than CountVectorizer among the traditional feature extraction methods. Among all the traditional ML algorithms we used, RandomForest with Tf-IDF overall performed the best. The simple 2-layer Neural Network had the best AUC score overall. 
+For future work, we think we can further improve the score by training on a bigger dataset. For this project we only had 10K instances to predict 6 labels. Furthermore, we could train on a more advanced network like Transformers using BERT word embeddings. 
 
 
